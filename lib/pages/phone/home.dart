@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/models.dart';
@@ -35,7 +38,7 @@ class _HomePageState extends State<HomePage> {
           itemBuilder: (context, i) => bandTile(bands[i])),
       floatingActionButton: FloatingActionButton(
         elevation: 1,
-        onPressed: () {},
+        onPressed: addNewBand,
         child: const Icon(Icons.add),
       ),
     );
@@ -54,7 +57,66 @@ class _HomePageState extends State<HomePage> {
         '${band.votes}',
         style: votesStyle,
       ),
-      onTap: () {},
+      onTap: () {
+        print(band.name!);
+      },
     );
+  }
+
+  addNewBand() {
+    final textController = TextEditingController();
+
+    if (Platform.isAndroid) {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('New Band name: '),
+              content: TextField(
+                controller: textController,
+              ),
+              actions: [
+                MaterialButton(
+                  elevation: 5,
+                  onPressed: () => addBandToList(textController.text),
+                  textColor: Colors.blue,
+                  child: const Text('Add'),
+                )
+              ],
+            );
+          });
+    }
+
+    showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+            title: const Text('New Band name: '),
+            content: TextField(
+              controller: textController,
+            ),
+            actions: [
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                onPressed: () => addBandToList(textController.text),
+                child: const Text('Add'),
+              ),
+              CupertinoDialogAction(
+                isDestructiveAction: true,
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Dismiss'),
+              )
+            ]);
+      },
+    );
+  }
+
+  void addBandToList(String name) {
+    if (name.length > 1) {
+      bands.add(Band(id: DateTime.now.toString(), name: name, votes: 0));
+      setState(() {});
+    }
+
+    Navigator.pop(context);
   }
 }
