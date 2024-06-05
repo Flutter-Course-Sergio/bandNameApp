@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: ListView.builder(
           itemCount: bands.length,
-          itemBuilder: (context, i) => bandTile(bands[i])),
+          itemBuilder: (context, i) => _bandTile(bands[i])),
       floatingActionButton: FloatingActionButton(
         elevation: 1,
         onPressed: addNewBand,
@@ -44,22 +44,40 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  ListTile bandTile(Band band) {
+  Widget _bandTile(Band band) {
     const votesStyle = TextStyle(fontSize: 20);
+    const dismissStyle = TextStyle(color: Colors.white);
 
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.blue[100],
-        child: Text(band.name!.substring(0, 2)),
-      ),
-      title: Text(band.name!),
-      trailing: Text(
-        '${band.votes}',
-        style: votesStyle,
-      ),
-      onTap: () {
-        print(band.name!);
+    return Dismissible(
+      key: Key(band.id!),
+      direction: DismissDirection.startToEnd,
+      onDismissed: (direction) {
+        
       },
+      background: Container(
+        color: Colors.red.shade300,
+        padding: const EdgeInsets.only(left: 8.0),
+        child: const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Delete band',
+              style: dismissStyle,
+            )),
+      ),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.blue[100],
+          child: Text(band.name!.substring(0, 2)),
+        ),
+        title: Text(band.name!),
+        trailing: Text(
+          '${band.votes}',
+          style: votesStyle,
+        ),
+        onTap: () {
+          print(band.name!);
+        },
+      ),
     );
   }
 
