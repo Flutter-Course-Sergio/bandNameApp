@@ -24,6 +24,15 @@ class SocketService with ChangeNotifier {
       _serverStatus = ServerStatus.offline;
       notifyListeners();
     });
+
+    socket.on('new-message', (payload) {
+      final name = payload.containsKey('name') ? payload['name'] : 'No name';
+      final message =
+          payload.containsKey('message') ? payload['message'] : 'No message';
+
+      print('name: $name');
+      print('message: $message');
+    });
   }
 
   get serverStatus => _serverStatus;
