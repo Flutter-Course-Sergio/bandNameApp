@@ -5,35 +5,29 @@ enum ServerStatus { online, offline, connecting }
 
 class SocketService with ChangeNotifier {
   ServerStatus _serverStatus = ServerStatus.connecting;
+  late io.Socket _socket;
 
   SocketService() {
     _initConfig();
   }
 
   void _initConfig() {
-    io.Socket socket = io.io('https://88g5wr91-3000.usw3.devtunnels.ms/', {
+    _socket = io.io('https://88g5wr91-3000.usw3.devtunnels.ms/', {
       'transports': ['websocket'],
       'autoConnect': true
     });
-    socket.onConnect((_) {
+    _socket.onConnect((_) {
       _serverStatus = ServerStatus.online;
       notifyListeners();
     });
 
-    socket.onDisconnect((_) {
+    _socket.onDisconnect((_) {
       _serverStatus = ServerStatus.offline;
       notifyListeners();
     });
-
-    socket.on('new-message', (payload) {
-      final name = payload.containsKey('name') ? payload['name'] : 'No name';
-      final message =
-          payload.containsKey('message') ? payload['message'] : 'No message';
-
-      print('name: $name');
-      print('message: $message');
-    });
   }
 
-  get serverStatus => _serverStatus;
+  ServerStatus get serverStatus => _serverStatus;
+  io.Socket get socket => _socket;
+  Function get emit => _socket.emit;
 }
