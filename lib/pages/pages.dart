@@ -1,7 +1,2 @@
-// Cellphone
-
-export '/pages/phone/home.dart';
-
-// Tablet
-
-
+export 'home.dart';
+export 'status.dart';

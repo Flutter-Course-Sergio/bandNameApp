@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/models.dart';
+import '../models/models.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
