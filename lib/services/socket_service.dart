@@ -16,9 +16,15 @@ class SocketService with ChangeNotifier {
       'autoConnect': true
     });
     socket.onConnect((_) {
-      print('connect');
+      _serverStatus = ServerStatus.online;
+      notifyListeners();
     });
 
-    socket.onDisconnect((_) => print('disconnect'));
+    socket.onDisconnect((_) {
+      _serverStatus = ServerStatus.offline;
+      notifyListeners();
+    });
   }
+
+  get serverStatus => _serverStatus;
 }
