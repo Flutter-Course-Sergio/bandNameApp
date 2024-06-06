@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/models.dart';
+import '../services/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,11 +24,23 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final socketService = Provider.of<SocketService>(context);
     const textStyle1 = TextStyle(color: Colors.black87);
+
+    final Icon icon;
+
+    if (socketService.serverStatus == ServerStatus.online) {
+      icon = const Icon(Icons.check_circle, color: Colors.green);
+    } else {
+      icon = const Icon(Icons.offline_bolt, color: Colors.red);
+    }
 
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
+        actions: [
+          Container(margin: const EdgeInsets.only(right: 10), child: icon)
+        ],
         title: const Text(
           'BandNames',
           style: textStyle1,
@@ -51,9 +65,7 @@ class _HomePageState extends State<HomePage> {
     return Dismissible(
       key: Key(band.id!),
       direction: DismissDirection.startToEnd,
-      onDismissed: (direction) {
-        
-      },
+      onDismissed: (direction) {},
       background: Container(
         color: Colors.red.shade300,
         padding: const EdgeInsets.only(left: 8.0),
