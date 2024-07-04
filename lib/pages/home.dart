@@ -74,6 +74,8 @@ class _HomePageState extends State<HomePage> {
     const votesStyle = TextStyle(fontSize: 20);
     const dismissStyle = TextStyle(color: Colors.white);
 
+    final socketService = Provider.of<SocketService>(context, listen: false);
+
     return Dismissible(
       key: Key(band.id!),
       direction: DismissDirection.startToEnd,
@@ -99,7 +101,7 @@ class _HomePageState extends State<HomePage> {
           style: votesStyle,
         ),
         onTap: () {
-          print(band.name!);
+          socketService.socket.emit('vote-band', {'id': band.id});
         },
       ),
     );
