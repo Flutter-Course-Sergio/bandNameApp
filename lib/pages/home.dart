@@ -74,7 +74,9 @@ class _HomePageState extends State<HomePage> {
     return Dismissible(
       key: Key(band.id!),
       direction: DismissDirection.startToEnd,
-      onDismissed: (direction) {},
+      onDismissed: (direction) {
+        socketService.socket.emit('delete-band', {'id': band.id});
+      },
       background: Container(
         color: Colors.red.shade300,
         padding: const EdgeInsets.only(left: 8.0),
@@ -151,8 +153,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void addBandToList(String name) {
-    final socketService = Provider.of<SocketService>(context, listen: false);
     if (name.length > 1) {
+      final socketService = Provider.of<SocketService>(context, listen: false);
       socketService.socket.emit('add-band', {'name': name});
     }
 
